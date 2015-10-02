@@ -1,14 +1,8 @@
 package ua.com.juja.sqlcmd.integration;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
+
 import org.junit.Test;
 import ua.com.juja.sqlcmd.controller.Main;
-import ua.com.juja.sqlcmd.model.DataSet;
-import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
-
-import java.io.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,32 +11,13 @@ import static org.junit.Assert.assertEquals;
  */
 public class IntegrationTest {
 
-    private ConfigurableInputStream in;
-    private ByteArrayOutputStream out;
-    private DatabaseManager databaseManager;
-
-    @Before
-    public void setup() {
-        databaseManager = new JDBCDatabaseManager();
-        out = new ByteArrayOutputStream();
-        in = new ConfigurableInputStream();
-
-        System.setIn(in);
-        System.setOut(new PrintStream(out));
-
-        // clear db
-//        in.add("connect|sqlcmd|postgres|postgres");
-//        in.add("clear");
-//        in.add("exit");
-//        Main.main(new String[0]);
-//        out.reset();
-    }
+    private ConsoleMock console = new ConsoleMock();
 
     @Test
     public void testHelp() {
         // given
-        in.add("help");
-        in.add("exit");
+        console.addIn("help");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -68,23 +43,13 @@ public class IntegrationTest {
                 "\t\tдля выхода из программы\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
-    }
-
-    public String getData() {
-        try {
-            String result = new String(out.toByteArray(), "UTF-8");
-            out.reset();
-            return result;
-        } catch (UnsupportedEncodingException e) {
-            return e.getMessage();
-        }
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testExit() {
         // given
-        in.add("exit");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -93,14 +58,14 @@ public class IntegrationTest {
         assertEquals("Привет юзер!\r\n" +
                 "Введи, пожалуйста имя базы данных, имя пользователя и пароль в формате: connect|database|userName|password\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testListWithoutConnect() {
         // given
-        in.add("tables");
-        in.add("exit");
+        console.addIn("tables");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -112,14 +77,14 @@ public class IntegrationTest {
                 "Вы не можете пользоваться командой 'tables' пока не подключитесь с помощью комманды connect|databaseName|userName|password\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testFindWithoutConnect() {
         // given
-        in.add("find|user");
-        in.add("exit");
+        console.addIn("find|user");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -131,14 +96,14 @@ public class IntegrationTest {
                 "Вы не можете пользоваться командой 'find|user' пока не подключитесь с помощью комманды connect|databaseName|userName|password\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testUnsupported() {
         // given
-        in.add("unsupported");
-        in.add("exit");
+        console.addIn("unsupported");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -150,15 +115,15 @@ public class IntegrationTest {
                 "Вы не можете пользоваться командой 'unsupported' пока не подключитесь с помощью комманды connect|databaseName|userName|password\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testUnsupportedAfterConnect() {
         // given
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("unsupported");
-        in.add("exit");
+        console.addIn("connect|sqlcmd|postgres|postgres");
+        console.addIn("unsupported");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -173,15 +138,15 @@ public class IntegrationTest {
                 "Несуществующая команда: unsupported\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testListAfterConnect() {
         // given
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("tables");
-        in.add("exit");
+        console.addIn("connect|sqlcmd|postgres|postgres");
+        console.addIn("tables");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -196,16 +161,16 @@ public class IntegrationTest {
                 "[user, test]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testFindAfterConnect() {
         // given
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("clear|user");
-        in.add("find|user");
-        in.add("exit");
+        console.addIn("connect|sqlcmd|postgres|postgres");
+        console.addIn("clear|user");
+        console.addIn("find|user");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -226,17 +191,17 @@ public class IntegrationTest {
                 "--------------------\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testConnectAfterConnect() {
         // given
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("tables");
-        in.add("connect|test|postgres|postgres");
-        in.add("tables");
-        in.add("exit");
+        console.addIn("connect|sqlcmd|postgres|postgres");
+        console.addIn("tables");
+        console.addIn("connect|test|postgres|postgres");
+        console.addIn("tables");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -257,14 +222,14 @@ public class IntegrationTest {
                 "[qwe]\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testConnectWithError() {
         // given
-        in.add("connect|sqlcmd");
-        in.add("exit");
+        console.addIn("connect|sqlcmd");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -277,7 +242,7 @@ public class IntegrationTest {
                 "Повтори попытку.\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
@@ -299,12 +264,12 @@ public class IntegrationTest {
 //        user2.put("password", "+++++");
 //        databaseManager.create("user", user2);
 
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("clear|user");
-        in.add("create|user|id|13|name|Stiven|password|*****");
-        in.add("create|user|id|14|name|Eva|password|+++++");
-        in.add("find|user");
-        in.add("exit");
+        console.addIn("connect|sqlcmd|postgres|postgres");
+        console.addIn("clear|user");
+        console.addIn("create|user|id|13|name|Stiven|password|*****");
+        console.addIn("create|user|id|14|name|Eva|password|+++++");
+        console.addIn("find|user");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -333,15 +298,15 @@ public class IntegrationTest {
                 "--------------------\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testClearWithError() {
         // given
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("clear|sadfasd|fsf|fdsf");
-        in.add("exit");
+        console.addIn("connect|sqlcmd|postgres|postgres");
+        console.addIn("clear|sadfasd|fsf|fdsf");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -357,15 +322,15 @@ public class IntegrationTest {
                 "Повтори попытку.\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 
     @Test
     public void testCreateWithErrors() {
         // given
-        in.add("connect|sqlcmd|postgres|postgres");
-        in.add("create|user|error");
-        in.add("exit");
+        console.addIn("connect|sqlcmd|postgres|postgres");
+        console.addIn("create|user|error");
+        console.addIn("exit");
 
         // when
         Main.main(new String[0]);
@@ -381,6 +346,6 @@ public class IntegrationTest {
                 "Повтори попытку.\r\n" +
                 "Введи команду (или help для помощи):\r\n" +
                 // exit
-                "До скорой встречи!\r\n", getData());
+                "До скорой встречи!\r\n", console.getOut());
     }
 }
