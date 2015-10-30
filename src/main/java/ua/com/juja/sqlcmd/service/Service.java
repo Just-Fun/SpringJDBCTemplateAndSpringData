@@ -9,4 +9,5 @@ public interface Service {
 
     List<String> commandsList();
 
+    void connect(String databaseName, String userName, String password);
 }

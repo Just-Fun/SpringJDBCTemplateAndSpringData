@@ -5,6 +5,7 @@
         <title>SQLCmd</title>
     </head>
     <body>
-        Cant load this page. You can goto <a href="menu">Menu</a><br>
+        Йойкс! Что-то пошло не так: ${message}<br>
+        <a href="menu">menu</a><br>
     </body>
 </html>
