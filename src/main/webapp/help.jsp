@@ -19,6 +19,6 @@
             для вывода этого списка на экран<br>
         exit<br>
             для выхода из программы<br>
-        You can goto <a href="menu">Menu</a><br>
+        <%@include file="footer.jsp" %>
     </body>
 </html>

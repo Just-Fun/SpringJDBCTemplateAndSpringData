@@ -6,6 +6,6 @@
     </head>
     <body>
         Йойкс! Что-то пошло не так: ${message}<br>
-        <a href="menu">menu</a><br>
+        <%@include file="footer.jsp" %>
     </body>
 </html>
