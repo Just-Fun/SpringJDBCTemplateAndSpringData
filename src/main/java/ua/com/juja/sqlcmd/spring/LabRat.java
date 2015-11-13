@@ -5,6 +5,7 @@ package ua.com.juja.sqlcmd.spring;
  */
 public class LabRat {
 
+    private Service service;
     private String text;
     private String name;
 
@@ -13,7 +14,7 @@ public class LabRat {
     }
 
     public String getText() {
-        return text;
+        return text + "{" + service.getData() + "}";
     }
 
     public void setText(String text) {
@@ -25,10 +26,14 @@ public class LabRat {
     }
 
     public String getName() {
-        return name;
+        return name + "{" + service.getData() + "}";
     }
 
     public void sayHi(){
-        System.out.println(text);
+        System.out.println(getText());
+    }
+
+    public void setService(Service service) {
+        this.service = service;
     }
 }
