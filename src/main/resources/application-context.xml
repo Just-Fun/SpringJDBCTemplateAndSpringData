@@ -6,9 +6,9 @@
 
     <!-- Thanks http://devcolibri.com/1191 -->
     <bean id="rat" class="ua.com.juja.sqlcmd.spring.LabRat">
-        <constructor-arg value="Hi!"/>
+        <constructor-arg type="String" value="Hi!"/>
+        <constructor-arg type="HelloWorldService" ref="service"/>
         <property name="name" value="Alice"/>
-        <property name="service" ref="service"/>
     </bean>
 
     <bean id="service" class="ua.com.juja.sqlcmd.spring.HelloWorldService"/>

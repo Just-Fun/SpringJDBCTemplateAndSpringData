@@ -9,8 +9,9 @@ public class LabRat {
     private String text;
     private String name;
 
-    public LabRat(String text) {
+    public LabRat(String text, HelloWorldService service) {
         this.text = text;
+        this.service = service;
     }
 
     public String getText() {
@@ -33,7 +34,4 @@ public class LabRat {
         System.out.println(getText());
     }
 
-    public void setService(HelloWorldService service) {
-        this.service = service;
-    }
 }
