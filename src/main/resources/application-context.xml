@@ -4,36 +4,5 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                            http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <!--Map<String, Object> beans = new HashMap<String, Object>();-->
-
-    <!-- Thanks http://devcolibri.com/1191 -->
-    <bean id="rat" class="ua.com.juja.sqlcmd.spring.LabRat">
-        <constructor-arg type="String" value="Hi!"/>
-        <constructor-arg type="HelloWorldService" ref="service"/>
-        <property name="name" value="Alice"/>
-    </bean>
-    <!--LabRat rat = new LabRat("Hi!", service);
-    rat.setName("Alice")-->
-
-    <!--LabRat bean = new LabRat("Hi!", beans.get("service"));
-    bean.setName("Alice")
-    beans.put("rat", rat);-->
-
-    <bean id="qwe" class="ua.com.juja.sqlcmd.spring.LabRat" init-method="init()">
-        <constructor-arg type="HelloWorldService" ref="service"/>
-        <constructor-arg type="String" value="Hi!"/>
-        <property name="name" value="Alice"/>
-    </bean>
-    <!--LabRat qwe = new LabRat("Hi!", service);
-    qwe.setName("Alice")-->
-
-    <!--LabRat bean = new LabRat("Hi!", beans.get("service"));
-    bean.setName("Alice")
-    beans.put("qwe", rat);-->
-
-    <bean id="service" class="ua.com.juja.sqlcmd.spring.HelloWorldService"/>
-    <!--Service service = new Service();-->
-
-    <!--beans.put(service, new Service());-->
 
 </beans>
