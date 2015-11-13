@@ -18,6 +18,10 @@ public class LabRat {
         return text + "{" + service.getData() + "}";
     }
 
+    public void init() {
+        //
+    }
+
     public void setText(String text) {
         this.text = text;
     }
