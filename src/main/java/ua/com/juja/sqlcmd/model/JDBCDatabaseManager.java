@@ -1,11 +1,14 @@
 package ua.com.juja.sqlcmd.model;
 
+import org.springframework.stereotype.Component;
+
 import java.sql.*;
 import java.util.*;
 
 /**
  * Created by indigo on 21.08.2015.
  */
+@Component
 public class JDBCDatabaseManager implements DatabaseManager {
 
     private Connection connection;
