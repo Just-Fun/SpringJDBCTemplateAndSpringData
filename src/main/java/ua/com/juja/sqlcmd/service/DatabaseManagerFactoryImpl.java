@@ -1,17 +1,24 @@
 package ua.com.juja.sqlcmd.service;
 
-import org.springframework.stereotype.Component;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
-import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
 
 /**
  * Created by oleksandr.baglai on 13.11.2015.
  */
-@Component
 public class DatabaseManagerFactoryImpl implements DatabaseManagerFactory {
+
+    private String className;
 
     @Override
     public DatabaseManager createDatabaseManager() {
-        return new JDBCDatabaseManager();
+        try {
+            return (DatabaseManager)Class.forName(className).newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
     }
 }
