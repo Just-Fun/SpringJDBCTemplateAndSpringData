@@ -5,7 +5,7 @@ package ua.com.juja.sqlcmd.spring;
  */
 public class LabRat {
 
-    private Service service;
+    private HelloWorldService service;
     private String text;
     private String name;
 
@@ -33,7 +33,7 @@ public class LabRat {
         System.out.println(getText());
     }
 
-    public void setService(Service service) {
+    public void setService(HelloWorldService service) {
         this.service = service;
     }
 }
