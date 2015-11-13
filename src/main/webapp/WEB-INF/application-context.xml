@@ -7,10 +7,6 @@
                            http://www.springframework.org/schema/context
                            http://www.springframework.org/schema/context/spring-context-3.2.xsd">
 
-    <bean id="serviceFactory" class="ua.com.juja.sqlcmd.service.ServiceFactory">
-        <property name="service" ref="dummyServiceImpl"/>
-    </bean>
-
     <context:annotation-config/>
     <context:component-scan base-package="ua.com.juja.sqlcmd.service"/>
 

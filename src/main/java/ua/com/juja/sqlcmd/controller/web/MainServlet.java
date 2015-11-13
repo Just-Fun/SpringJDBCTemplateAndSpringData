@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Service;
-import ua.com.juja.sqlcmd.service.ServiceFactory;
 
 import java.io.IOException;
 
@@ -19,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 public class MainServlet extends HttpServlet {
 
     @Autowired
-    private ServiceFactory serviceFactory;
+    private Service service;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -49,7 +48,7 @@ public class MainServlet extends HttpServlet {
         }
 
 		if (action.startsWith("/menu") || action.equals("/")) {
-            req.setAttribute("items", serviceFactory.getService().commandsList());
+            req.setAttribute("items", service.commandsList());
 			req.getRequestDispatcher("menu.jsp").forward(req, resp);
 
 		} else if (action.startsWith("/help")) {
@@ -57,7 +56,7 @@ public class MainServlet extends HttpServlet {
 
         } else if (action.startsWith("/find")) {
             String tableName = req.getParameter("table");
-            req.setAttribute("table", serviceFactory.getService().find(manager, tableName));
+            req.setAttribute("table", service.find(manager, tableName));
             req.getRequestDispatcher("find.jsp").forward(req, resp);
 
         } else {
@@ -80,7 +79,7 @@ public class MainServlet extends HttpServlet {
             String password = req.getParameter("password");
 
             try {
-                DatabaseManager manager = serviceFactory.getService().connect(databaseName, userName, password);
+                DatabaseManager manager = service.connect(databaseName, userName, password);
                 req.getSession().setAttribute("db_manager", manager);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (Exception e) {

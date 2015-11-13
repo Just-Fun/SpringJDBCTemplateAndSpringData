@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by oleksandr.baglai on 30.10.2015.
  */
-@Component
+//@Component
 public class DummyServiceImpl implements Service {
 
     @Override
