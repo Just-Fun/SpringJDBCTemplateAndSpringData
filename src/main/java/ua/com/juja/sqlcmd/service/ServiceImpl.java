@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.service;
 
+import org.springframework.stereotype.Component;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.JDBCDatabaseManager;
@@ -9,6 +10,7 @@ import java.util.*;
 /**
  * Created by oleksandr.baglai on 30.10.2015.
  */
+@Component
 public class ServiceImpl implements Service {
 
     @Override

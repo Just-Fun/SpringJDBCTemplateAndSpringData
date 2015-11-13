@@ -1,26 +1,31 @@
 package ua.com.juja.sqlcmd.controller.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Service;
-import ua.com.juja.sqlcmd.service.ServiceImpl;
+import ua.com.juja.sqlcmd.service.ServiceFactory;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 public class MainServlet extends HttpServlet {
 
-    private Service service;
+    @Autowired
+    private ServiceFactory serviceFactory;
 
     @Override
-    public void init() throws ServletException {
-        super.init();
-
-        service = new ServiceImpl();
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this,
+                config.getServletContext());
     }
 
     @Override
@@ -44,7 +49,7 @@ public class MainServlet extends HttpServlet {
         }
 
 		if (action.startsWith("/menu") || action.equals("/")) {
-            req.setAttribute("items", service.commandsList());
+            req.setAttribute("items", serviceFactory.getService().commandsList());
 			req.getRequestDispatcher("menu.jsp").forward(req, resp);
 
 		} else if (action.startsWith("/help")) {
@@ -52,7 +57,7 @@ public class MainServlet extends HttpServlet {
 
         } else if (action.startsWith("/find")) {
             String tableName = req.getParameter("table");
-            req.setAttribute("table", service.find(manager, tableName));
+            req.setAttribute("table", serviceFactory.getService().find(manager, tableName));
             req.getRequestDispatcher("find.jsp").forward(req, resp);
 
         } else {
@@ -75,10 +80,11 @@ public class MainServlet extends HttpServlet {
             String password = req.getParameter("password");
 
             try {
-                DatabaseManager manager = service.connect(databaseName, userName, password);
+                DatabaseManager manager = serviceFactory.getService().connect(databaseName, userName, password);
                 req.getSession().setAttribute("db_manager", manager);
                 resp.sendRedirect(resp.encodeRedirectURL("menu"));
             } catch (Exception e) {
+                e.printStackTrace();
                 req.setAttribute("message", e.getMessage());
                 req.getRequestDispatcher("error.jsp").forward(req, resp);
             }
