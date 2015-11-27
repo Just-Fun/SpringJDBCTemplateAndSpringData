@@ -12,10 +12,9 @@ import java.util.*;
  * Created by oleksandr.baglai on 30.10.2015.
  */
 @Component
-public class ServiceImpl implements Service {
+public abstract class ServiceImpl implements Service {
 
-    @Autowired
-    private DatabaseManagerFactory factory;
+    protected abstract DatabaseManager getManager();
 
     @Override
     public List<String> commandsList() {
@@ -24,7 +23,7 @@ public class ServiceImpl implements Service {
 
     @Override
     public DatabaseManager connect(String databaseName, String userName, String password) {
-        DatabaseManager manager = factory.createDatabaseManager();
+        DatabaseManager manager = getManager();
         manager.connect(databaseName, userName, password);
         return manager;
     }

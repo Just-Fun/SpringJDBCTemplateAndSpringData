@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,23 +26,18 @@ import static org.mockito.Mockito.when;
 /**
  * Created by oleksandr.baglai on 27.11.2015.
  */
+@RunWith(MockitoJUnitRunner.class)
 public class ServiceImplTest {
 
-    @InjectMocks
-    private ServiceImpl service;
+    private ServiceImpl service = new ServiceImpl() {
+        @Override
+        protected DatabaseManager getManager() {
+            return manager;
+        }
+    };
 
     @Mock
     private DatabaseManager manager;
-
-    @Mock
-    private DatabaseManagerFactory factory;
-
-    @Before
-    public void initMocks(){
-        MockitoAnnotations.initMocks(this);
-
-        when(factory.createDatabaseManager()).thenReturn(manager);
-    }
 
     @Test
     public void test() {

@@ -10,8 +10,8 @@
     <context:annotation-config/>
     <context:component-scan base-package="ua.com.juja.sqlcmd.service"/>
 
-    <bean id="databaseManagerFactory" class="ua.com.juja.sqlcmd.service.DatabaseManagerFactoryImpl">
-        <property name="className" value="ua.com.juja.sqlcmd.model.JDBCDatabaseManager"/>
+    <bean id="service" class="ua.com.juja.sqlcmd.service.ServiceImpl">
+        <lookup-method name="getManager" bean="JDBCDatabaseManager"/>
     </bean>
 
 </beans>
