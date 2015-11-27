@@ -70,6 +70,19 @@ public class MockIntegrationTest {
         driver.findElement(By.id("connect")).click();
 
         // then
+        assertLinks("[help, list]",
+                "[/sqlcmd/help, /sqlcmd/list]");
+
+        // when
+        driver.get(getBase() + "/sqlcmd/list");
+
+        // then
+        assertLinks("[table1, table2]",
+                "[/sqlcmd/find?table=table1, " +
+                "/sqlcmd/find?table=table2]");
+    }
+
+    private void assertLinks(String expectedNames, String expectedUrls) {
         List<WebElement> elements = driver.findElements(By.tagName("a"));
         List<String> names = new LinkedList<>();
         List<String> urls = new LinkedList<>();
@@ -77,27 +90,14 @@ public class MockIntegrationTest {
             names.add(element.getText());
             urls.add(element.getAttribute("href"));
         }
-        assertEquals("[help, list]", names.toString());
-        String base = "http://localhost:" + runner.getPort();
-        assertEquals("[/sqlcmd/help, " +
-                "/sqlcmd/list]", urls.toString()
+        assertEquals(expectedNames, names.toString());
+        String base = getBase();
+        assertEquals(expectedUrls, urls.toString()
                 .replaceAll(base, ""));
+    }
 
-        // when
-        driver.get(base + "/sqlcmd/list");
-
-        // then
-        List<WebElement> elements2 = driver.findElements(By.tagName("a"));
-        List<String> names2 = new LinkedList<>();
-        List<String> urls2 = new LinkedList<>();
-        for (WebElement element : elements2) {
-            names2.add(element.getText());
-            urls2.add(element.getAttribute("href"));
-        }
-        assertEquals("[table1, table2]", names2.toString());
-        assertEquals("[/sqlcmd/find?table=table1, " +
-                "/sqlcmd/find?table=table2]", urls2.toString()
-                .replaceAll(base, ""));
+    private String getBase() {
+        return "http://localhost:" + runner.getPort();
     }
 
 
