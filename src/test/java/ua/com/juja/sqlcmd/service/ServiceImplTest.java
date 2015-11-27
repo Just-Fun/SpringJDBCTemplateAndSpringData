@@ -1,43 +1,67 @@
 package ua.com.juja.sqlcmd.service;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DataSetImpl;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by oleksandr.baglai on 27.11.2015.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:test-application-context.xml" })
 public class ServiceImplTest {
 
-    @Autowired
-    private Service service;
+    @InjectMocks
+    private ServiceImpl service;
+
+    @Mock
+    private DatabaseManager manager;
+
+    @Mock
+    private DatabaseManagerFactory factory;
+
+    @Before
+    public void initMocks(){
+        MockitoAnnotations.initMocks(this);
+
+        when(factory.createDatabaseManager()).thenReturn(manager);
+    }
 
     @Test
     public void test() {
         // given
-        DatabaseManager manager = service.connect("databse", "user", "password");
-
-        DataSetImpl input = new DataSetImpl();
+        DataSet input = new DataSetImpl();
         input.put("id", 13);
         input.put("name", "Stiven");
         input.put("password", "Pass");
         manager.create("users", input);
 
-        DataSetImpl input2 = new DataSetImpl();
+        DataSet input2 = new DataSetImpl();
         input2.put("id", 14);
         input2.put("name", "Eva");
         input2.put("password", "PassPass");
         manager.create("users", input2);
+
+        when(manager.getTableColumns("users"))
+                .thenReturn(new LinkedHashSet(Arrays.asList("name", "password", "id")));
+        when(manager.getTableData("users"))
+                .thenReturn(Arrays.asList(input, input2));
 
         // when
         List<List<String>> users = service.find(manager, "users");
