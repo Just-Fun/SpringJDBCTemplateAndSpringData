@@ -1,4 +1,4 @@
-package ua.com.juja.sqlcmd.controller.web;
+package ua.com.juja.sqlcmd.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

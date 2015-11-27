@@ -41,7 +41,13 @@ public class ServiceImpl implements Service {
             List<String> row = new ArrayList<>(columns.size());
             result.add(row);
             for (String column : columns) {
-                row.add(dataSet.get(column).toString());
+                Object value = dataSet.get(column);
+                if (value == null) {
+                    throw new IllegalStateException(String.format(
+                            "Ожидалось колонка с именем %s но ее нет, а есть %s",
+                            column, dataSet));
+                }
+                row.add(value.toString());
             }
         }
 

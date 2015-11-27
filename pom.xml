@@ -44,6 +44,9 @@
 			<artifactId>postgresql</artifactId>
 			<version>9.1-901-1.jdbc4</version>
 		</dependency>
+
+		<!--TEST-->
+
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
@@ -56,7 +59,11 @@
 			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${org.springframework.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
