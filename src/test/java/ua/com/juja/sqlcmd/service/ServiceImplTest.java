@@ -14,34 +14,25 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DataSetImpl;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by oleksandr.baglai on 27.11.2015.
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath:test-application-context.xml")
 public class ServiceImplTest {
 
-    private ServiceImpl service = new ServiceImpl() {
-        @Override
-        protected DatabaseManager getManager() {
-            return manager;
-        }
-    };
-
-    @Mock
-    private DatabaseManager manager;
+    @Autowired
+    private Service service;
 
     @Test
     public void test() {
         // given
+        DatabaseManager manager = service.connect("database", "user", "password");
+
         DataSet input = new DataSetImpl();
         input.put("id", 13);
         input.put("name", "Stiven");
@@ -53,11 +44,6 @@ public class ServiceImplTest {
         input2.put("name", "Eva");
         input2.put("password", "PassPass");
         manager.create("users", input2);
-
-        when(manager.getTableColumns("users"))
-                .thenReturn(new LinkedHashSet(Arrays.asList("name", "password", "id")));
-        when(manager.getTableData("users"))
-                .thenReturn(Arrays.asList(input, input2));
 
         // when
         List<List<String>> users = service.find(manager, "users");
