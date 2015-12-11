@@ -18,7 +18,7 @@ public abstract class ServiceImpl implements Service {
 
     @Override
     public List<String> commandsList() {
-        return Arrays.asList("help", "find", "list");
+        return Arrays.asList("help", "list");
     }
 
     @Override
