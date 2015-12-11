@@ -6,7 +6,7 @@
     </head>
     <body>
         <c:forEach items="${list}" var="name">
-            <a href="find?table=${name}">${name}</a><br>
+            <a href="tables/${name}">${name}</a><br>
         </c:forEach>
     </body>
 </html>

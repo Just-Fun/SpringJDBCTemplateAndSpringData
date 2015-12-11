@@ -7,10 +7,7 @@ package ua.com.juja.sqlcmd.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.service.Service;
 
@@ -61,18 +58,18 @@ public class MainController {
         }
     }
 
-    @RequestMapping(value = "/find", params = { "table" }, method = RequestMethod.GET)
-    public String find(Model model,
-                       @RequestParam(value = "table") String tableName,
+    @RequestMapping(value = "/tables/{table}", method = RequestMethod.GET)
+    public String tables(Model model,
+                       @PathVariable(value = "table") String table,
                        HttpSession session) {
         DatabaseManager manager = getManager(session);
 
         if (manager == null) {
-            session.setAttribute("from-page", "/find?table=" + tableName);
-            return "redirect:connect";
+            session.setAttribute("from-page", "/tables/" + table);
+            return "redirect:/connect";
         }
 
-        model.addAttribute("table", service.find(manager, tableName));
+        model.addAttribute("table", service.find(manager, table));
 
         return "find";
     }
@@ -89,7 +86,7 @@ public class MainController {
 
         if (manager == null) {
             session.setAttribute("from-page", "/list");
-            return "redirect:connect";
+            return "redirect:/connect";
         }
 
         model.addAttribute("list", service.tables(manager));
