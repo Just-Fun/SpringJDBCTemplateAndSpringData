@@ -82,7 +82,6 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public void create(String tableName, DataSet input) {
-
         String tableNames = StringUtils.collectionToDelimitedString(input.getNames(), ",");
         String values = StringUtils.collectionToDelimitedString(input.getValues(), ",", "'", "'");
 
@@ -95,19 +94,11 @@ public class JDBCDatabaseManager implements DatabaseManager {
         String tableNames = StringUtils.collectionToDelimitedString(newValue.getNames(), ",", "", " = ?");
 
         String sql = "UPDATE public." + tableName + " SET " + tableNames + " WHERE id = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
-            int index = 1;
-            for (Object value : newValue.getValues()) {
-                ps.setObject(index, value);
-                index++;
-            }
-            ps.setInt(index, id);
+        List<Object> objects = new LinkedList<>(newValue.getValues());
+        objects.add(id);
 
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        template.update(sql, objects.toArray());
     }
 
     @Override
