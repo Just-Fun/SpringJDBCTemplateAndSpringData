@@ -40,18 +40,13 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public Set<String> getTableNames() {
-        Set<String> tables = new LinkedHashSet<String>();
-        try (Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'"))
-        {
-            while (rs.next()) {
-                tables.add(rs.getString("table_name"));
-            }
-            return tables;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return tables;
-        }
+        return new LinkedHashSet<>(template.query("SELECT table_name FROM information_schema.tables WHERE table_schema='public' AND table_type='BASE TABLE'",
+                new RowMapper<String>() {
+                    public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return rs.getString("table_name");
+                    }
+                }
+        ));
     }
 
     @Override
