@@ -66,6 +66,7 @@ public class JDBCDatabaseManager implements DatabaseManager {
             template = new JdbcTemplate(new SingleConnectionDataSource(connection, false));
         } catch (SQLException e) {
             connection = null;
+            template = null;
             throw new RuntimeException(
                     String.format("Cant get connection for model:%s user:%s",
                             database, userName),
@@ -75,25 +76,15 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public void clear(String tableName) {
-        try (Statement stmt = connection.createStatement()) {
-            stmt.executeUpdate("DELETE FROM public." + tableName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        template.execute("DELETE FROM public." + tableName);
     }
 
     @Override
     public void create(String tableName, DataSet input) {
-        try (Statement stmt = connection.createStatement()) {
-
-            String tableNames = getNameFormated(input, "%s,");
-            String values = getValuesFormated(input, "'%s',");
-
-            stmt.executeUpdate("INSERT INTO public." + tableName + " (" + tableNames + ")" +
-                    "VALUES (" + values + ")");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        String tableNames = getNameFormated(input, "%s,");
+        String values = getValuesFormated(input, "'%s',");
+        template.update("INSERT INTO public." + tableName + " (" + tableNames + ")" +
+                "VALUES (" + values + ")");
     }
 
     private String getValuesFormated(DataSet input, String format) {
