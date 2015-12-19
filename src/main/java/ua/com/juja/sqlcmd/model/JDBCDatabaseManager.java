@@ -103,18 +103,13 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public Set<String> getTableColumns(String tableName) {
-        Set<String> tables = new LinkedHashSet<String>();
-        try (Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'"))
-        {
-            while (rs.next()) {
-                tables.add(rs.getString("column_name"));
-            }
-            return tables;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return tables;
-        }
+        return new LinkedHashSet<>(template.query("SELECT * FROM information_schema.columns WHERE table_schema = 'public' AND table_name = '" + tableName + "'",
+                new RowMapper<String>() {
+                    public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return rs.getString("column_name");
+                    }
+                }
+        ));
     }
 
     @Override
