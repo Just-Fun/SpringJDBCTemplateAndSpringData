@@ -17,6 +17,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     private Connection connection;
     private JdbcTemplate template;
+    private String database;
+    private String userName;
 
     @Override
     public List<DataSet> getTableData(String tableName) {
@@ -64,6 +66,8 @@ public class JDBCDatabaseManager implements DatabaseManager {
             connection = DriverManager.getConnection(
                     "jdbc:postgresql://localhost:5432/" + database, userName,
                     password);
+            this.database = database;
+            this.userName = userName;
             template = new JdbcTemplate(new SingleConnectionDataSource(connection, false));
         } catch (SQLException e) {
             connection = null;
@@ -117,4 +121,13 @@ public class JDBCDatabaseManager implements DatabaseManager {
         return connection != null;
     }
 
+    @Override
+    public String getDatabaseName() {
+        return database;
+    }
+
+    @Override
+    public String getUserName() {
+        return userName;
+    }
 }

@@ -74,6 +74,14 @@ public class MainController {
         return "find";
     }
 
+    @RequestMapping(value = "/actions/{userName}", method = RequestMethod.GET)
+    public String actions(Model model,
+                         @PathVariable(value = "userName") String userName) {
+        model.addAttribute("actions", service.getAllFor(userName));
+
+        return "actions";
+    }
+
     @RequestMapping(value = "/menu", method = RequestMethod.GET)
     public String menu(Model model) {
         model.addAttribute("items", service.commandsList());
@@ -96,4 +104,7 @@ public class MainController {
     private DatabaseManager getManager(HttpSession session) {
         return (DatabaseManager) session.getAttribute("db_manager");
     }
+
+    // TODO со странички http://localhost:8080/sqlcmd/tables/user
+    // мереходим на menu то видим ошибку
 }
