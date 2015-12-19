@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.sql.*;
 import java.util.*;
@@ -81,24 +82,17 @@ public class JDBCDatabaseManager implements DatabaseManager {
 
     @Override
     public void create(String tableName, DataSet input) {
-        String tableNames = getNameFormated(input, "%s,");
-        String values = getValuesFormated(input, "'%s',");
-        template.update("INSERT INTO public." + tableName + " (" + tableNames + ")" +
-                "VALUES (" + values + ")");
-    }
 
-    private String getValuesFormated(DataSet input, String format) {
-        String values = "";
-        for (Object value: input.getValues()) {
-            values += String.format(format, value);
-        }
-        values = values.substring(0, values.length() - 1);
-        return values;
+        String tableNames = StringUtils.collectionToDelimitedString(input.getNames(), ",");
+        String values = StringUtils.collectionToDelimitedString(input.getValues(), ",", "'", "'");
+
+        template.update(String.format("INSERT INTO public.%s (%s) VALUES (%s)",
+                tableName, tableNames, values));
     }
 
     @Override
     public void update(String tableName, int id, DataSet newValue) {
-        String tableNames = getNameFormated(newValue, "%s = ?,");
+        String tableNames = StringUtils.collectionToDelimitedString(newValue.getNames(), ",", "", " = ?");
 
         String sql = "UPDATE public." + tableName + " SET " + tableNames + " WHERE id = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -137,12 +131,4 @@ public class JDBCDatabaseManager implements DatabaseManager {
         return connection != null;
     }
 
-    private String getNameFormated(DataSet newValue, String format) {
-        String string = "";
-        for (String name : newValue.getNames()) {
-            string += String.format(format, name);
-        }
-        string = string.substring(0, string.length() - 1);
-        return string;
-    }
 }
