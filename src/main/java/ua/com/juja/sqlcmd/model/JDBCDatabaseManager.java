@@ -117,6 +117,29 @@ public class JDBCDatabaseManager implements DatabaseManager {
     }
 
     @Override
+    public Set<String> getDatabasesNames() {
+
+        return new LinkedHashSet<>(template.query("SELECT datname FROM pg_database WHERE datistemplate = false;",
+                new RowMapper<String>() {
+                    @Override
+                    public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        return rs.getString("datname");
+                    }
+                }));
+    }
+
+    @Override
+    public void createDatabase(String databaseName) {
+        template.execute(String.format("CREATE DATABASE %s", databaseName));
+
+        /*try (Statement statement = connection.createStatement()) {
+            statement.executeUpdate("CREATE DATABASE " + databaseName);
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getLocalizedMessage());
+        }*/
+    }
+
+    @Override
     public boolean isConnected() {
         return connection != null;
     }

@@ -3,22 +3,28 @@
     <head>
         <title>SQLCmd</title>
     </head>
-    <body>
-    Существующие команды:<br>
-        connect|databaseName|userName|password<br>
-            для подключения к базе данных, с которой будем работать<br>
-        tables<br>
-            для получения списка всех таблиц базы, к которой подключились<br>
-        clear|tableName<br>
-            для очистки всей таблицы<br>
-        create|tableName|column1|value1|column2|value2|...|columnN|valueN<br>
-            для создания записи в таблице<br>
-        find|tableName<br>
-            для получения содержимого таблицы tableName<br>
-        help<br>
-            для вывода этого списка на экран<br>
-        exit<br>
-            для выхода из программы<br>
-        <%@include file="footer.jsp" %>
-    </body>
+     <body>
+       Существующие команды:<br>
+           <a href="connect">connect</a><br>
+               для подключения к базе данных, с которой будем работать<br>
+           <a href="list">list</a><br>
+               для получения списка всех таблиц базы, к которой подключились<br>
+           <a href="databases">databases</a><br>
+               для получения списка всех databases<br>
+           <a href="createDatabase">createDatabase</a><br>
+               для создания новой базы<br>
+           <a href="student">student</a><br>
+               для создания студентов :)<br>
+           <a href="students">students</a><br>
+              для получения списка students<br>
+           clear|tableName<br>
+               для очистки всей таблицы<br>
+           <a href="help">help</a><br>
+               для вывода этого списка на экран<br>
+           <a href="actions/postgres">actions</a><br>
+               для вывода списка действий пользователя postgres<br>
+           exit<br>
+               для выхода из программы<br>
+           <%@include file="footer.jsp" %>
+       </body>
 </html>

@@ -29,4 +29,8 @@ public interface DatabaseManager {
     String getDatabaseName();
 
     String getUserName();
+
+    Set<String> getDatabasesNames();
+
+    void createDatabase(String name);
 }

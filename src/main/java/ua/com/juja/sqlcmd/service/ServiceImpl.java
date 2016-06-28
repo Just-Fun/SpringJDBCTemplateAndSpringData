@@ -2,6 +2,7 @@ package ua.com.juja.sqlcmd.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import ua.com.juja.sqlcmd.model.entity.Student;
 import ua.com.juja.sqlcmd.model.*;
 import ua.com.juja.sqlcmd.model.entity.UserAction;
 
@@ -18,9 +19,12 @@ public abstract class ServiceImpl implements Service {
     @Autowired
     private UserActionRepository userActions;
 
+    @Autowired
+    private StudentsRepository students;
+
     @Override
     public List<String> commandsList() {
-        return Arrays.asList("help", "list");
+        return Arrays.asList("help", "databases", "list", "hello", "createDatabase", "student", "students");
     }
 
     @Override
@@ -75,5 +79,15 @@ public abstract class ServiceImpl implements Service {
         }
 
         return userActions.findByUserName(userName);
+    }
+
+    @Override
+    public List<Student> getAllForStudent() {
+        return students.findAll();
+    }
+
+    @Override
+    public void createStudent(String name, int age) {
+        students.save(new Student(name, age));
     }
 }

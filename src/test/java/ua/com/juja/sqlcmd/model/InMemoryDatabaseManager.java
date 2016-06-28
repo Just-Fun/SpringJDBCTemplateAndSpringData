@@ -49,7 +49,7 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     @Override
     public void update(String tableName, int id, DataSet newValue) {
         for (DataSet dataSet : get(tableName)) {
-            if (dataSet.get("id") == id) {
+            if (dataSet.get("id").equals(id)) {
                 dataSet.updateFrom(newValue);
             }
         }
@@ -63,5 +63,25 @@ public class InMemoryDatabaseManager implements DatabaseManager {
     @Override
     public boolean isConnected() {
         return true;
+    }
+
+    @Override
+    public String getDatabaseName() {
+        return "";
+    }
+
+    @Override
+    public String getUserName() {
+        return "";
+    }
+
+    @Override
+    public Set<String> getDatabasesNames() {
+        return new LinkedHashSet<>();
+    }
+
+    @Override
+    public void createDatabase(String name) {
+        // do nothing
     }
 }

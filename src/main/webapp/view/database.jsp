@@ -5,10 +5,9 @@
         <title>SQLCmd</title>
     </head>
     <body>
-    <h4>Таблицы:</h4>
-        <c:forEach items="${list}" var="name">
-            <a href="tables/${name}">${name}</a><br>
-        </c:forEach>
+    <td>${name}</td>
+         успешно создана<br>
+        <td>список</td><a href="databases"> databases</a>
         <%@include file="footer.jsp" %>
     </body>
 </html>
