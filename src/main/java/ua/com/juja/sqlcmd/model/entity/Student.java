@@ -5,6 +5,8 @@ import javax.persistence.*;
 /**
  * Created by Oleg on 6/23/2016.
  */
+//CREATE TABLE students(ID SERIAL PRIMARY KEY,name text NOT NULL,age integer)
+
 @Entity
 @Table(name = "students", schema = "public")
 public class Student {
@@ -31,6 +33,7 @@ public class Student {
     public void setAge(Integer age) {
         this.age = age;
     }
+
     public Integer getAge() {
         return age;
     }
@@ -38,6 +41,7 @@ public class Student {
     public void setName(String name) {
         this.name = name;
     }
+
     public String getName() {
         return name;
     }
@@ -45,6 +49,7 @@ public class Student {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public Integer getId() {
         return id;
     }
